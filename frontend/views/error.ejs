@@ -1,0 +1,23 @@
+<div class="container my-5">
+    <div class="row">
+        <div class="col-lg-6 mx-auto text-center">
+            <div class="error-template">
+                <h1 class="display-1 text-danger">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </h1>
+                <h2 class="display-4">Oops! Noe gikk galt</h2>
+                <p class="lead">
+                    <%= typeof message !== 'undefined' ? message : 'En uventet feil har oppstått.' %>
+                </p>
+                <div class="error-actions mt-4">
+                    <a href="/" class="btn btn-primary btn-lg">
+                        <i class="fas fa-home"></i> Tilbake til forsiden
+                    </a>
+                    <a href="/guide" class="btn btn-light btn-lg">
+                        <i class="fas fa-question-circle"></i> Få hjelp
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 

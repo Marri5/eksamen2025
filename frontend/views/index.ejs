@@ -1,0 +1,100 @@
+<div class="container my-5">
+    <div class="text-center mb-5">
+        <h1 class="display-4">Hvilken rev er søtest?</h1>
+        <p class="lead">Klikk på knappen under bildet for å stemme på din favoritt!</p>
+    </div>
+
+    <% if (error) { %>
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="fas fa-exclamation-triangle"></i> <%= error %>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    <% } %>
+
+    <div id="voting-container">
+        <% if (images && images.length === 2) { %>
+            <div class="row justify-content-center g-4">
+                <% images.forEach((image, index) => { %>
+                    <div class="col-12 col-md-6 col-lg-5">
+                        <div class="card shadow-lg h-100">
+                            <div class="card-header bg-primary text-white text-center">
+                                <h5 class="mb-0">Rev <%= index + 1 %></h5>
+                            </div>
+                            <div class="card-body text-center">
+                                <div class="image-container mb-3">
+                                    <img src="<%= image.url %>" 
+                                         alt="Rev <%= index + 1 %>" 
+                                         class="img-fluid rounded fox-image"
+                                         style="max-height: 400px; width: 100%; object-fit: cover;">
+                                </div>
+                                <button class="btn btn-lg btn-success vote-btn" 
+                                        data-image-url="<%= image.url %>"
+                                        data-image-index="<%= index + 1 %>">
+                                    <i class="fas fa-heart"></i> Stem på denne reven
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                <% }) %>
+            </div>
+        <% } else { %>
+            <div class="text-center">
+                <button class="btn btn-primary btn-lg" onclick="location.reload()">
+                    <i class="fas fa-sync-alt"></i> Last inn bilder på nytt
+                </button>
+            </div>
+        <% } %>
+    </div>
+
+    <!-- Success message modal -->
+    <div class="modal fade" id="voteSuccessModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title">
+                        <i class="fas fa-check-circle"></i> Takk for din stemme!
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <p class="lead mb-3" id="voteMessage">Din stemme er registrert!</p>
+                    <div class="d-grid gap-2">
+                        <button class="btn btn-primary" onclick="location.reload()">
+                            <i class="fas fa-redo"></i> Stem på flere rever
+                        </button>
+                        <a href="/statistics" class="btn btn-info">
+                            <i class="fas fa-chart-bar"></i> Se statistikk
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Error message modal -->
+    <div class="modal fade" id="voteErrorModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title">
+                        <i class="fas fa-exclamation-circle"></i> Feil ved avstemning
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p id="errorMessage">Kunne ikke registrere stemmen. Vennligst prøv igjen.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Lukk</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Loading overlay -->
+<div id="loadingOverlay" class="d-none">
+    <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Laster...</span>
+    </div>
+</div> 
