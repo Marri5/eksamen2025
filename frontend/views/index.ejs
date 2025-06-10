@@ -200,12 +200,21 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function initializeVoting() {
+    console.log('Initializing voting...');
+    
     // Add click handlers to vote buttons
-    document.querySelectorAll('.vote-btn').forEach(button => {
+    const voteButtons = document.querySelectorAll('.vote-btn');
+    console.log('Found vote buttons:', voteButtons.length);
+    
+    voteButtons.forEach((button, index) => {
+        console.log(`Setting up button ${index}:`, button.getAttribute('data-fox-id'));
+        
         button.addEventListener('click', function() {
+            console.log('Vote button clicked!');
             const foxId = this.getAttribute('data-fox-id');
             const imageUrl = this.getAttribute('data-image-url');
             
+            console.log('Vote button data:', { foxId, imageUrl });
             vote(foxId, imageUrl, this);
         });
     });
@@ -217,12 +226,18 @@ function initializeVoting() {
 }
 
 function vote(foxId, imageUrl, buttonElement) {
+    console.log('Vote function called:', { foxId, imageUrl });
+    
     // Disable button to prevent double-clicking
     buttonElement.disabled = true;
     buttonElement.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Stemmer...';
     
-    // Show loading spinner
-    showLoading();
+    // Show loading spinner (check if function exists)
+    if (typeof showLoading === 'function') {
+        showLoading();
+    } else {
+        console.warn('showLoading function not found');
+    }
     
     fetch('/vote', {
         method: 'POST',
@@ -234,12 +249,24 @@ function vote(foxId, imageUrl, buttonElement) {
             imageUrl: imageUrl
         })
     })
-    .then(response => response.json())
+    .then(response => {
+        console.log('Vote response received:', response.status);
+        return response.json();
+    })
     .then(data => {
-        hideLoading();
+        console.log('Vote response data:', data);
+        
+        if (typeof hideLoading === 'function') {
+            hideLoading();
+        }
         
         if (data.success) {
-            showAlert('success', `<i class="fas fa-check me-2"></i>Takk for stemmen! Rev ${foxId} fikk din stemme.`);
+            // Use alert if showAlert doesn't exist
+            if (typeof showAlert === 'function') {
+                showAlert('success', `<i class="fas fa-check me-2"></i>Takk for stemmen! Rev ${foxId} fikk din stemme.`);
+            } else {
+                alert(`Takk for stemmen! Rev ${foxId} fikk din stemme.`);
+            }
             
             // Update button to show success
             buttonElement.innerHTML = '<i class="fas fa-check me-2"></i>Stemme avgitt!';
@@ -257,7 +284,11 @@ function vote(foxId, imageUrl, buttonElement) {
             }, 3000);
             
         } else {
-            showAlert('danger', `<i class="fas fa-exclamation-triangle me-2"></i>${data.error}`);
+            if (typeof showAlert === 'function') {
+                showAlert('danger', `<i class="fas fa-exclamation-triangle me-2"></i>${data.error}`);
+            } else {
+                alert(`Feil: ${data.error}`);
+            }
             
             // Re-enable button
             buttonElement.disabled = false;
@@ -265,9 +296,17 @@ function vote(foxId, imageUrl, buttonElement) {
         }
     })
     .catch(error => {
-        hideLoading();
         console.error('Voting error:', error);
-        showAlert('danger', '<i class="fas fa-exclamation-triangle me-2"></i>Noe gikk galt. Prøv igjen.');
+        
+        if (typeof hideLoading === 'function') {
+            hideLoading();
+        }
+        
+        if (typeof showAlert === 'function') {
+            showAlert('danger', '<i class="fas fa-exclamation-triangle me-2"></i>Noe gikk galt. Prøv igjen.');
+        } else {
+            alert('Noe gikk galt. Prøv igjen.');
+        }
         
         // Re-enable button
         buttonElement.disabled = false;
