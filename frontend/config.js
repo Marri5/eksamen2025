@@ -1,12 +1,14 @@
+require('dotenv').config();
+
 /**
  * Configuration for Frontend Server
- * Contains API endpoints and server settings
+ * Contains API endpoints and server settings loaded from environment variables
  */
 
 const config = {
   // Server configuration
   port: process.env.PORT || 3000,
-  host: '10.12.91.103',
+  host: process.env.HOST || '10.12.91.103',
   
   // Backend API configuration
   api: {

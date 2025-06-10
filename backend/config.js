@@ -1,12 +1,14 @@
+require('dotenv').config();
+
 /**
  * Configuration for Backend Server
- * Contains database connection and server settings
+ * Contains database connection and server settings loaded from environment variables
  */
 
 const config = {
   // Server configuration
   port: process.env.PORT || 3001,
-  host: '10.12.91.101',
+  host: process.env.HOST || '10.12.91.101',
   
   // Database configuration
   mongodb: {
@@ -25,8 +27,8 @@ const config = {
   
   // Rate limiting
   rateLimit: {
-    windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 100 // limit each IP to 100 requests per windowMs
+    windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS) || 15 * 60 * 1000, // 15 minutes
+    max: parseInt(process.env.RATE_LIMIT_MAX_REQUESTS) || 100 // limit each IP to 100 requests per windowMs
   },
   
   // Fox API configuration
