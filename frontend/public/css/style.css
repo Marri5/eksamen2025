@@ -18,7 +18,7 @@ body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     line-height: 1.6;
     color: var(--dark-color);
-    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    background-color: #f8f9fa;
     min-height: 100vh;
 }
 
@@ -62,7 +62,8 @@ body {
 /* Fox Card Specific Styles */
 .fox-card {
     position: relative;
-    background: linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%);
+    background: #ffffff;
+    border: 1px solid #e0e0e0;
 }
 
 .fox-card .card-img-container {
@@ -72,31 +73,36 @@ body {
 }
 
 .fox-card .fox-image {
-    height: 300px;
-    object-fit: cover;
+    height: 250px;
+    object-fit: contain;
     transition: transform 0.3s ease;
     width: 100%;
+    background-color: #f8f9fa;
+    border-radius: 0.5rem;
 }
 
 .fox-card:hover .fox-image {
-    transform: scale(1.05);
+    transform: scale(1.02);
 }
 
 .fox-card .card-body {
     padding: 1.5rem;
-    background: linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%);
+    background: #ffffff;
 }
 
 /* Vote Button Styles */
 .vote-btn {
-    border-radius: 2rem;
+    border-radius: 1rem;
     padding: 0.75rem 2rem;
     font-weight: 600;
-    text-transform: uppercase;
+    text-transform: none;
     letter-spacing: 0.5px;
     transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
+    background: linear-gradient(45deg, #0d6efd, #0dcaf0);
+    border: none;
+    color: white;
 }
 
 .vote-btn:before {
@@ -310,7 +316,8 @@ footer {
 /* Responsive Design */
 @media (max-width: 768px) {
     .fox-card .fox-image {
-        height: 250px;
+        height: 200px;
+        object-fit: contain;
     }
     
     .navbar-brand {
@@ -337,7 +344,8 @@ footer {
 
 @media (max-width: 576px) {
     .fox-card .fox-image {
-        height: 200px;
+        height: 180px;
+        object-fit: contain;
     }
     
     .container-fluid {
