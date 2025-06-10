@@ -336,11 +336,16 @@ function loadNewFoxes() {
     
     fetch('/new-foxes?count=2')
     .then(response => {
-        console.log('New foxes response:', response.status);
+        console.log('New foxes response:', response.status, response.ok);
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
         return response.json();
     })
     .then(data => {
-        console.log('New foxes data:', data);
+        console.log('New foxes data received:', data);
+        console.log('Data success:', data.success);
+        console.log('Data array:', data.data);
         
         if (typeof hideLoading === 'function') {
             hideLoading();
@@ -384,6 +389,8 @@ function loadNewFoxes() {
 
 function updateFoxDisplay(foxes) {
     console.log('Updating fox display with:', foxes);
+    console.log('Foxes array length:', foxes ? foxes.length : 'undefined');
+    
     const container = document.getElementById('voting-container');
     
     if (!container) {
@@ -391,15 +398,35 @@ function updateFoxDisplay(foxes) {
         return;
     }
     
+    console.log('Found voting container:', container);
+    
     // Clear existing foxes
+    console.log('Clearing existing foxes...');
     container.innerHTML = '';
+    
+    // Check if foxes is an array
+    if (!Array.isArray(foxes)) {
+        console.error('Foxes is not an array:', typeof foxes);
+        return;
+    }
     
     // Add new foxes
     foxes.forEach((fox, index) => {
-        console.log(`Creating card for fox ${fox.foxId}`);
-        const foxCard = createFoxCard(fox);
-        container.appendChild(foxCard);
+        console.log(`Creating card for fox ${fox.foxId} with image ${fox.imageUrl}`);
+        try {
+            const foxCard = createFoxCard(fox);
+            if (foxCard) {
+                container.appendChild(foxCard);
+                console.log(`Successfully added fox card ${index + 1}/${foxes.length}`);
+            } else {
+                console.error(`createFoxCard returned null for fox:`, fox);
+            }
+        } catch (error) {
+            console.error(`Error creating card for fox ${fox.foxId}:`, error);
+        }
     });
+    
+    console.log(`Added ${foxes.length} fox cards to container`);
     
     // Re-initialize voting functionality
     console.log('Re-initializing voting after fox display update');
@@ -407,6 +434,13 @@ function updateFoxDisplay(foxes) {
 }
 
 function createFoxCard(fox) {
+    console.log('Creating fox card for:', fox);
+    
+    if (!fox || !fox.foxId || !fox.imageUrl) {
+        console.error('Invalid fox data:', fox);
+        return null;
+    }
+    
     const col = document.createElement('div');
     col.className = 'col-lg-5 col-md-6 mb-4';
     
@@ -443,6 +477,7 @@ function createFoxCard(fox) {
         </div>
     `;
     
+    console.log('Created fox card element');
     return col;
 }
 
