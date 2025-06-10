@@ -53,20 +53,20 @@ const voteDistribution = [
 
 async function seedDatabase() {
   try {
-    console.log('🔌 Connecting to MongoDB...');
+    console.log('Connecting to MongoDB...');
     await mongoose.connect(MONGODB_URI, {
       useNewUrlParser: true,
       useUnifiedTopology: true
     });
-    console.log('✅ Connected to MongoDB');
+    console.log('Connected to MongoDB');
 
     // Optional: Clear existing data
-    console.log('\n🧹 Clearing existing data...');
+    console.log('\nClearing existing data...');
     await Fox.deleteMany({});
     await Vote.deleteMany({});
-    console.log('✅ Existing data cleared');
+    console.log('Existing data cleared');
 
-    console.log('\n🦊 Creating fox entries with votes...');
+    console.log('\nCreating fox entries with votes...');
     
     for (let i = 0; i < sampleFoxUrls.length; i++) {
       const url = sampleFoxUrls[i];
@@ -98,11 +98,11 @@ async function seedDatabase() {
         await Promise.all(votePromises);
       }
 
-      console.log(`✅ Created fox #${i + 1} with ${voteCount} votes`);
+      console.log(`Created fox #${i + 1} with ${voteCount} votes`);
     }
 
     // Get statistics
-    console.log('\n📊 Database Statistics:');
+    console.log('\nDatabase Statistics:');
     const foxCount = await Fox.countDocuments();
     const totalVotes = await Vote.countDocuments();
     const topFox = await Fox.findOne().sort({ votes: -1 });
@@ -111,14 +111,14 @@ async function seedDatabase() {
     console.log(`- Total votes: ${totalVotes}`);
     console.log(`- Most popular fox: ${topFox.votes} votes`);
 
-    console.log('\n✨ Seed data created successfully!');
-    console.log('🌐 Visit http://10.12.91.103:3000/statistics to see the results');
+    console.log('\nSeed data created successfully!');
+    console.log('Visit http://10.12.91.103:3000/statistics to see the results');
 
   } catch (error) {
-    console.error('❌ Error seeding database:', error);
+    console.error('Error seeding database:', error);
   } finally {
     await mongoose.disconnect();
-    console.log('\n👋 Disconnected from MongoDB');
+    console.log('\nDisconnected from MongoDB');
   }
 }
 

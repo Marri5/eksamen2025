@@ -84,6 +84,13 @@ main {
 /* Modal customization */
 .modal-header.bg-success {
     border-bottom: none;
+    background-color: #d4edda !important;
+    color: #155724 !important;
+}
+
+.modal-header.bg-success .modal-title,
+.modal-header.bg-success .btn-close {
+    color: #155724 !important;
 }
 
 .modal-header.bg-danger {
@@ -151,6 +158,30 @@ main {
     }
 }
 
+/* Guide page readability improvements */
+.card-body h5,
+.card-body h3 {
+    color: #343a40;
+    font-weight: 600;
+}
+
+.card-body p,
+.card-body li {
+    color: #495057;
+    line-height: 1.6;
+}
+
+.card-body ol,
+.card-body ul {
+    color: #495057;
+}
+
+/* Success modal text improvements */
+#voteMessage {
+    color: #155724 !important;
+    font-weight: 600;
+}
+
 /* Dark mode support */
 @media (prefers-color-scheme: dark) {
     body {
@@ -173,6 +204,19 @@ main {
     
     footer {
         background-color: #0a0a0a !important;
+    }
+    
+    /* Dark mode guide readability */
+    .card-body h5,
+    .card-body h3 {
+        color: #e0e0e0 !important;
+    }
+    
+    .card-body p,
+    .card-body li,
+    .card-body ol,
+    .card-body ul {
+        color: #d0d0d0 !important;
     }
 }
 
