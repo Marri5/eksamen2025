@@ -1,0 +1,153 @@
+<%- include('layout', { body: `
+<div class="row">
+    <div class="col-12">
+        <h1 class="mb-4">
+            <i class="bi bi-bar-chart"></i> Statistikk
+        </h1>
+        
+        <% if (typeof error !== 'undefined' && error) { %>
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <%= error %>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        <% } else if (stats && stats.topImages.length > 0) { %>
+            <!-- Summary Cards -->
+            <div class="row mb-4">
+                <div class="col-md-4 mb-3">
+                    <div class="card text-center">
+                        <div class="card-body">
+                            <h5 class="card-title">Totalt antall stemmer</h5>
+                            <p class="display-4 text-primary"><%= stats.totalVotes %></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="card text-center">
+                        <div class="card-body">
+                            <h5 class="card-title">Antall bilder</h5>
+                            <p class="display-4 text-info"><%= stats.topImages.length %></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="card text-center">
+                        <div class="card-body">
+                            <h5 class="card-title">Ledende bilde</h5>
+                            <% if (stats.leadingImage) { %>
+                                <p class="h5 text-success"><%= stats.leadingImage.originalName %></p>
+                                <p class="text-muted"><%= stats.leadingImage.votes %> stemmer</p>
+                            <% } else { %>
+                                <p class="text-muted">Ingen stemmer ennå</p>
+                            <% } %>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Top 10 Images -->
+            <h2 class="mb-3">Topp 10 mest populære bilder</h2>
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Rangering</th>
+                            <th>Bilde</th>
+                            <th>Navn</th>
+                            <th>Stemmer</th>
+                            <th>Prosent av totalt</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% stats.topImages.forEach((image, index) => { %>
+                            <tr>
+                                <td>
+                                    <span class="badge bg-<%= index === 0 ? 'warning' : index < 3 ? 'secondary' : 'light text-dark' %>">
+                                        #<%= index + 1 %>
+                                    </span>
+                                </td>
+                                <td>
+                                    <img src="<%= backendUrl %>/uploads/<%= image.filename %>" 
+                                         alt="<%= image.originalName %>"
+                                         class="img-thumbnail"
+                                         style="width: 60px; height: 60px; object-fit: cover;">
+                                </td>
+                                <td><%= image.originalName %></td>
+                                <td>
+                                    <span class="badge bg-primary"><%= image.votes %></span>
+                                </td>
+                                <td>
+                                    <div class="progress" style="height: 20px;">
+                                        <div class="progress-bar" 
+                                             role="progressbar" 
+                                             style="width: <%= stats.totalVotes > 0 ? (image.votes / stats.totalVotes * 100).toFixed(1) : 0 %>%">
+                                            <%= stats.totalVotes > 0 ? (image.votes / stats.totalVotes * 100).toFixed(1) : 0 %>%
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        <% }) %>
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Chart -->
+            <div class="mt-5">
+                <h3>Stemmefordeling</h3>
+                <canvas id="votesChart" width="400" height="200"></canvas>
+            </div>
+            
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+            <script>
+                const ctx = document.getElementById('votesChart').getContext('2d');
+                const topImages = <%- JSON.stringify(stats.topImages.slice(0, 5)) %>;
+                
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: topImages.map(img => img.originalName.length > 20 ? img.originalName.substring(0, 20) + '...' : img.originalName),
+                        datasets: [{
+                            label: 'Antall stemmer',
+                            data: topImages.map(img => img.votes),
+                            backgroundColor: [
+                                'rgba(255, 206, 86, 0.8)',
+                                'rgba(54, 162, 235, 0.8)',
+                                'rgba(255, 99, 132, 0.8)',
+                                'rgba(75, 192, 192, 0.8)',
+                                'rgba(153, 102, 255, 0.8)'
+                            ],
+                            borderColor: [
+                                'rgba(255, 206, 86, 1)',
+                                'rgba(54, 162, 235, 1)',
+                                'rgba(255, 99, 132, 1)',
+                                'rgba(75, 192, 192, 1)',
+                                'rgba(153, 102, 255, 1)'
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    stepSize: 1
+                                }
+                            }
+                        }
+                    }
+                });
+            </script>
+        <% } else { %>
+            <div class="text-center py-5">
+                <i class="bi bi-bar-chart display-1 text-muted"></i>
+                <p class="text-muted mt-3">Ingen statistikk tilgjengelig ennå.</p>
+                <a href="/" class="btn btn-primary">
+                    <i class="bi bi-arrow-left"></i> Tilbake til galleriet
+                </a>
+            </div>
+        <% } %>
+    </div>
+</div>
+` }) %> 

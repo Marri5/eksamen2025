@@ -1,0 +1,66 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:6.0
+    container_name: voting-mongodb
+    ports:
+      - "10.12.91.102:27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    environment:
+      MONGO_INITDB_DATABASE: imageVoting
+    networks:
+      backend:
+        ipv4_address: 10.12.91.102
+    restart: unless-stopped
+    command: mongod --bind_ip 10.12.91.102
+
+  backend:
+    build: ./backend
+    container_name: voting-backend
+    depends_on:
+      - mongodb
+    ports:
+      - "10.12.91.101:5000:5000"
+    volumes:
+      - ./backend/uploads:/app/uploads
+    environment:
+      NODE_ENV: production
+      PORT: 5000
+    networks:
+      backend:
+        ipv4_address: 10.12.91.101
+      frontend:
+        ipv4_address: 10.12.91.201
+    restart: unless-stopped
+
+  frontend:
+    build: ./frontend
+    container_name: voting-frontend
+    depends_on:
+      - backend
+    ports:
+      - "10.12.91.103:3000:3000"
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+    networks:
+      frontend:
+        ipv4_address: 10.12.91.103
+    restart: unless-stopped
+
+volumes:
+  mongo_data:
+
+networks:
+  backend:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.12.91.0/24
+  frontend:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.12.91.0/24 
