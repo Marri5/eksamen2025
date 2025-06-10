@@ -26,22 +26,38 @@ app.set('layout', 'layout');
 app.set('layout extractScripts', true);
 app.set('layout extractStyles', true);
 
-// Security middleware with content security policy for images
+// Security middleware with relaxed CSP for development/production
 app.use(helmet({
   contentSecurityPolicy: {
     directives: {
       defaultSrc: ["'self'"],
-      styleSrc: ["'self'", "'unsafe-inline'", "https://cdnjs.cloudflare.com"],
-      scriptSrc: ["'self'", "'unsafe-inline'"],
-      imgSrc: ["'self'", "data:", "https:", "http:"],
-      connectSrc: ["'self'", config.api.baseUrl],
-      fontSrc: ["'self'", "https://cdnjs.cloudflare.com"]
+      styleSrc: ["'self'", "'unsafe-inline'", "https://cdnjs.cloudflare.com", "https://fonts.googleapis.com"],
+      scriptSrc: ["'self'", "'unsafe-inline'", "https://cdnjs.cloudflare.com"],
+      imgSrc: ["'self'", "data:", "https:", "http:", "https://randomfox.ca"],
+      connectSrc: ["'self'", config.api.baseUrl, "https://randomfox.ca"],
+      fontSrc: ["'self'", "https://cdnjs.cloudflare.com", "https://fonts.gstatic.com"],
+      objectSrc: ["'none'"],
+      upgradeInsecureRequests: null // Disable for HTTP development
     }
-  }
+  },
+  crossOriginOpenerPolicy: { policy: "unsafe-none" }, // Relax for development
+  crossOriginEmbedderPolicy: false // Disable for development
 }));
 
-// Static files middleware
-app.use(express.static(path.join(__dirname, 'public')));
+// Static files middleware with proper headers
+app.use(express.static(path.join(__dirname, 'public'), {
+  setHeaders: (res, path, stat) => {
+    // Set proper MIME types
+    if (path.endsWith('.css')) {
+      res.set('Content-Type', 'text/css');
+    }
+    if (path.endsWith('.js')) {
+      res.set('Content-Type', 'application/javascript');
+    }
+    // Add cache headers
+    res.set('Cache-Control', 'public, max-age=3600');
+  }
+}));
 
 // Parse request bodies
 app.use(express.json());
@@ -231,6 +247,13 @@ app.get('/about', (req, res) => {
   res.render('about', {
     title: 'About - Fox Voting System'
   });
+});
+
+/**
+ * Favicon handler
+ */
+app.get('/favicon.ico', (req, res) => {
+  res.status(204).end();
 });
 
 // 404 handler
