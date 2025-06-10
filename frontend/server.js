@@ -7,6 +7,7 @@ const express = require('express');
 const path = require('path');
 const axios = require('axios');
 const helmet = require('helmet');
+const expressLayouts = require('express-ejs-layouts');
 const config = require('./config');
 
 // Create Express application
@@ -18,6 +19,12 @@ app.set('trust proxy', true);
 // Set EJS as template engine
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
+
+// Configure express-ejs-layouts
+app.use(expressLayouts);
+app.set('layout', 'layout');
+app.set('layout extractScripts', true);
+app.set('layout extractStyles', true);
 
 // Security middleware with content security policy for images
 app.use(helmet({
