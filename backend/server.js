@@ -22,8 +22,20 @@ app.use(helmet({
   crossOriginResourcePolicy: { policy: "cross-origin" }
 }));
 
-// Rate limiting middleware
-const limiter = rateLimit(config.rateLimit);
+// Rate limiting middleware - configured for local development
+const limiter = rateLimit({
+  ...config.rateLimit,
+  // For local development, use a safer key generator
+  keyGenerator: (req) => {
+    // In development, use forwarded IP or fallback to connection IP
+    return req.ip || req.connection.remoteAddress || 'unknown';
+  },
+  // Skip rate limiting for local development IPs
+  skip: (req) => {
+    const ip = req.ip || req.connection.remoteAddress;
+    return ip === '127.0.0.1' || ip === '::1' || ip === '::ffff:127.0.0.1';
+  }
+});
 app.use(limiter);
 
 // CORS middleware

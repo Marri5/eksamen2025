@@ -14,8 +14,7 @@ const config = {
   mongodb: {
     uri: process.env.MONGODB_URI || 'mongodb://10.12.91.102:27017/foxvoting',
     options: {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
+      
     }
   },
   
