@@ -26,73 +26,64 @@ Et avstemningssystem for å velge den søteste reven, bygget for praktisk eksame
 - PM2 (for produksjon)
 - Nginx (valgfritt, for reverse proxy)
 
-## 🏗️ Arkitektur
-
-Systemet består av tre separate tjenester:
+## Fox Voting System - Prosjektstruktur
 
 ```
-Frontend (EJS + Bootstrap) → Backend (Express API) → Database (MongoDB)
+fox-voting-system/
+├── README.md                    # Hovedinstruksjoner og oversikt
+├── package.json                 # Node.js avhengigheter og scripts
+├── env.template                 # Miljøvariabler mal
+│
+├── backend/                     # Backend API server
+│   ├── server.js               # Express server og API-endepunkter
+│   └── models/                 # MongoDB modeller
+│       ├── Fox.js              # Fox datamodell
+│       └── Vote.js             # Vote datamodell
+│
+├── frontend/                    # Frontend webserver
+│   ├── server.js               # Express server for EJS
+│   ├── views/                  # EJS templates
+│   │   ├── layout.ejs          # Hoved-layout
+│   │   ├── index.ejs           # Avstemningsside
+│   │   ├── statistics.ejs      # Statistikkside
+│   │   ├── guide.ejs           # Brukerveiledning
+│   │   └── error.ejs           # Feilside
+│   └── public/                 # Statiske filer
+│       ├── css/
+│       │   └── style.css       # Custom CSS
+│       ├── js/
+│       │   └── main.js         # Frontend JavaScript
+│       └── images/
+│           └── .gitkeep        # Placeholder for images
+│
+├── scripts/                     # Deployment scripts
+│   ├── setup-mongodb.sh        # MongoDB oppsett
+│   ├── setup-backend.sh        # Backend server oppsett
+│   └── setup-frontend.sh       # Frontend server oppsett
+│
+└── docs/                        # Dokumentasjon
+    ├── PROJECT_OUTLINE.md       # Prosjektskisse og arkitektur
+    ├── SECURITY.md              # Sikkerhetsdokumentasjon
+    └── DEPLOYMENT_CHECKLIST.md  # Deployment sjekkliste
 ```
+## Filbeskrivelser
 
-Se [PROJECT_OUTLINE.md](docs/PROJECT_OUTLINE.md) for detaljert arkitekturdokumentasjon.
+### Backend-filer
+- **server.js**: Hovedfil for backend API med Express-konfigurasjon og alle API-endepunkter
+- **models/Fox.js**: Mongoose-modell for revebilder med URL og stemmetall
+- **models/Vote.js**: Mongoose-modell for individuelle stemmer
 
-## 📦 Installasjon
-
-### 1. Klon eller kopier prosjektet
-
-```bash
-# På hver server
-cd /opt
-sudo mkdir foxvoting
-sudo chown $USER:$USER foxvoting
-cd foxvoting
-# Kopier relevante filer hit
-```
-
-### 2. Installer avhengigheter
-
-```bash
-npm install
-```
-
-### 3. Konfigurer miljøvariabler
-
-```bash
-cp env.template .env
-# Rediger .env med riktige verdier
-```
-
-## 🚀 Deployment
-
-### Database Server (10.12.91.102)
-
-```bash
-cd scripts
-chmod +x setup-mongodb.sh
-./setup-mongodb.sh
-```
-
-### Backend Server (10.12.91.101)
-
-```bash
-cd scripts
-chmod +x setup-backend.sh
-./setup-backend.sh
-```
-
-### Frontend Server (10.12.91.103)
-
-```bash
-cd scripts
-chmod +x setup-frontend.sh
-./setup-frontend.sh
-```
+### Frontend-filer
+- **server.js**: Express-server som serverer EJS-templates
+- **views/**: Alle EJS-templates for brukergrensesnittet
+- **public/css/style.css**: Custom CSS for responsive design og animasjoner
+- **public/js/main.js**: JavaScript for avstemningsfunksjonalitet og AJAX-kall
 
 ## 💻 Bruk
 
 ### For sluttbrukere
 
-1. Åpne nettleseren og gå til http://10.12.91.103
+1. Åpne nettleseren og gå til foxvoting.wendigo.ikt-fag.no
 2. Se to revebilder side om side
 3. Klikk på "Stem på denne reven" under bildet du foretrekker
 4. Se statistikk over mest populære rever
