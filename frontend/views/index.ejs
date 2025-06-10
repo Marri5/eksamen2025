@@ -278,6 +278,9 @@ function vote(foxId, imageUrl, buttonElement) {
                 updateVoteDisplay(data.data);
             }
             
+            // Update statistics immediately
+            updateStatistics();
+            
             // Load new foxes after 3 seconds
             setTimeout(() => {
                 loadNewFoxes();
@@ -315,33 +318,64 @@ function vote(foxId, imageUrl, buttonElement) {
 }
 
 function loadNewFoxes() {
+    console.log('Loading new foxes...');
     const button = document.getElementById('new-foxes-btn');
+    if (!button) {
+        console.error('New foxes button not found');
+        return;
+    }
+    
     const originalText = button.innerHTML;
     
     button.disabled = true;
     button.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Laster nye rever...';
     
-    showLoading();
+    if (typeof showLoading === 'function') {
+        showLoading();
+    }
     
     fetch('/new-foxes?count=2')
-    .then(response => response.json())
+    .then(response => {
+        console.log('New foxes response:', response.status);
+        return response.json();
+    })
     .then(data => {
-        hideLoading();
+        console.log('New foxes data:', data);
+        
+        if (typeof hideLoading === 'function') {
+            hideLoading();
+        }
         
         if (data.success && data.data) {
             updateFoxDisplay(data.data);
-            showAlert('info', '<i class="fas fa-sync-alt me-2"></i>Nye rever lastet!');
+            if (typeof showAlert === 'function') {
+                showAlert('info', '<i class="fas fa-sync-alt me-2"></i>Nye rever lastet!');
+            } else {
+                console.log('Nye rever lastet!');
+            }
         } else {
-            showAlert('warning', '<i class="fas fa-exclamation-triangle me-2"></i>Kunne ikke laste nye rever. Prøv igjen.');
+            if (typeof showAlert === 'function') {
+                showAlert('warning', '<i class="fas fa-exclamation-triangle me-2"></i>Kunne ikke laste nye rever. Prøv igjen.');
+            } else {
+                alert('Kunne ikke laste nye rever. Prøv igjen.');
+            }
         }
         
         button.disabled = false;
         button.innerHTML = originalText;
     })
     .catch(error => {
-        hideLoading();
         console.error('Error loading new foxes:', error);
-        showAlert('danger', '<i class="fas fa-exclamation-triangle me-2"></i>Noe gikk galt. Prøv igjen.');
+        
+        if (typeof hideLoading === 'function') {
+            hideLoading();
+        }
+        
+        if (typeof showAlert === 'function') {
+            showAlert('danger', '<i class="fas fa-exclamation-triangle me-2"></i>Noe gikk galt. Prøv igjen.');
+        } else {
+            alert('Noe gikk galt. Prøv igjen.');
+        }
         
         button.disabled = false;
         button.innerHTML = originalText;
@@ -349,18 +383,26 @@ function loadNewFoxes() {
 }
 
 function updateFoxDisplay(foxes) {
+    console.log('Updating fox display with:', foxes);
     const container = document.getElementById('voting-container');
+    
+    if (!container) {
+        console.error('Voting container not found');
+        return;
+    }
     
     // Clear existing foxes
     container.innerHTML = '';
     
     // Add new foxes
     foxes.forEach((fox, index) => {
+        console.log(`Creating card for fox ${fox.foxId}`);
         const foxCard = createFoxCard(fox);
         container.appendChild(foxCard);
     });
     
     // Re-initialize voting functionality
+    console.log('Re-initializing voting after fox display update');
     initializeVoting();
 }
 
@@ -405,9 +447,14 @@ function createFoxCard(fox) {
 }
 
 function updateStatistics() {
+    console.log('Updating statistics...');
     fetch('/api/statistics')
-    .then(response => response.json())
+    .then(response => {
+        console.log('Statistics response:', response.status);
+        return response.json();
+    })
     .then(data => {
+        console.log('Statistics data:', data);
         if (data.success) {
             // Update leader display if it exists
             updateLeaderDisplay(data.data);
@@ -419,14 +466,32 @@ function updateStatistics() {
 }
 
 function updateLeaderDisplay(statistics) {
-    // This would update the leader display section
-    // Implementation depends on current page structure
+    console.log('Updating leader display with:', statistics);
+    
+    // Find leader section and update it
+    const leaderSection = document.querySelector('.row .card.bg-light.border-primary');
+    if (leaderSection && statistics.topFox) {
+        const badgeElement = leaderSection.querySelector('.badge.bg-primary');
+        if (badgeElement) {
+            badgeElement.textContent = `${statistics.topFox.voteCount} stemmer`;
+        }
+        
+        const totalVotesElement = leaderSection.querySelector('.text-muted.small');
+        if (totalVotesElement && statistics.summary) {
+            totalVotesElement.textContent = `Totalt ${statistics.summary.totalVotes} stemmer avgitt`;
+        }
+    }
 }
 
 function updateVoteDisplay(voteData) {
+    console.log('Updating vote display with:', voteData);
+    
     // Update vote counts and leader information
     if (voteData.topFox) {
-        // Update leader display
+        updateLeaderDisplay({ topFox: voteData.topFox, summary: { totalVotes: voteData.totalVotes } });
     }
+    
+    // Refresh statistics display
+    updateStatistics();
 }
 </script> 
