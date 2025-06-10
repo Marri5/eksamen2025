@@ -1,0 +1,23 @@
+{
+  "name": "fox-voting-system",
+  "version": "1.0.0",
+  "description": "Fox voting system for IT exam",
+  "scripts": {
+    "start:backend": "node backend/server.js",
+    "start:frontend": "node frontend/server.js",
+    "dev:backend": "nodemon backend/server.js",
+    "dev:frontend": "nodemon frontend/server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "mongoose": "^7.0.0",
+    "axios": "^1.4.0",
+    "ejs": "^3.1.9",
+    "dotenv": "^16.0.3",
+    "cors": "^2.8.5",
+    "body-parser": "^1.20.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.22"
+  }
+} 
