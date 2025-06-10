@@ -1,0 +1,530 @@
+<% layout('layout') -%>
+
+<div class="container">
+    <!-- Header Section -->
+    <div class="row mb-5">
+        <div class="col-12 text-center">
+            <h1 class="display-4 text-primary mb-3">
+                <i class="fas fa-question-circle me-3"></i>
+                Brukerveiledning
+            </h1>
+            <p class="lead text-muted">
+                Lær hvordan du bruker Rev-stemmsystemet
+            </p>
+        </div>
+    </div>
+
+    <!-- Quick Start Guide -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="card border-primary">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">
+                        <i class="fas fa-rocket me-2"></i>
+                        Kom i gang raskt
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <div class="d-flex align-items-start">
+                                <div class="badge bg-primary rounded-circle me-3 p-2">1</div>
+                                <div>
+                                    <h6 class="fw-bold">Gå til hovedsiden</h6>
+                                    <p class="text-muted small mb-0">Klikk på "Hjem" i navigasjonsmenyen for å se tilgjengelige rever.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="d-flex align-items-start">
+                                <div class="badge bg-primary rounded-circle me-3 p-2">2</div>
+                                <div>
+                                    <h6 class="fw-bold">Velg din favoritt</h6>
+                                    <p class="text-muted small mb-0">Se på revbildene og klikk "Stem på denne!" under reven du liker best.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="d-flex align-items-start">
+                                <div class="badge bg-primary rounded-circle me-3 p-2">3</div>
+                                <div>
+                                    <h6 class="fw-bold">Se resultatene</h6>
+                                    <p class="text-muted small mb-0">Etter at du har stemt, vil du se oppdaterte statistikker.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="d-flex align-items-start">
+                                <div class="badge bg-primary rounded-circle me-3 p-2">4</div>
+                                <div>
+                                    <h6 class="fw-bold">Stem igjen!</h6>
+                                    <p class="text-muted small mb-0">Få nye rever ved å klikke "Få nye rever" og stem på flere!</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Features Overview -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <h2 class="text-center mb-4">
+                <i class="fas fa-star me-2"></i>
+                Funksjoner og egenskaper
+            </h2>
+            
+            <div class="row">
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="card text-center h-100 border-success">
+                        <div class="card-body">
+                            <i class="fas fa-mobile-alt fa-3x text-success mb-3"></i>
+                            <h5 class="card-title">Mobilvenlig</h5>
+                            <p class="card-text">
+                                Fungerer perfekt på både mobil, nettbrett og PC. 
+                                Responsivt design som tilpasser seg skjermstørrelsen.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="card text-center h-100 border-info">
+                        <div class="card-body">
+                            <i class="fas fa-sync-alt fa-3x text-info mb-3"></i>
+                            <h5 class="card-title">Automatisk oppdatering</h5>
+                            <p class="card-text">
+                                Statistikk oppdateres automatisk hvert 30. sekund 
+                                slik at du alltid ser de nyeste resultatene.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="card text-center h-100 border-warning">
+                        <div class="card-body">
+                            <i class="fas fa-shield-alt fa-3x text-warning mb-3"></i>
+                            <h5 class="card-title">Spambeskyttelse</h5>
+                            <p class="card-text">
+                                Systemet forhindrer at samme person stemmer 
+                                på samme rev flere ganger i løpet av kort tid.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="row">
+        <div class="col-12 text-center">
+            <a href="/" class="btn btn-primary btn-lg me-3">
+                <i class="fas fa-home me-2"></i>Tilbake til hovedsiden
+            </a>
+            <a href="/about" class="btn btn-outline-secondary btn-lg">
+                <i class="fas fa-info-circle me-2"></i>Om systemet
+            </a>
+        </div>
+    </div>
+
+    <!-- Detailed Instructions -->
+    <div class="row mb-5">
+        <div class="col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-home me-2"></i>
+                        Hovedside - Stemming
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <h6>Slik stemmer du:</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2">
+                            <i class="fas fa-check text-success me-2"></i>
+                            Du vil se 2 tilfeldige revbilder
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-check text-success me-2"></i>
+                            Klikk på "Stem på denne!" under reven du liker best
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-check text-success me-2"></i>
+                            Du får en bekreftelse når stemmen er registrert
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-check text-success me-2"></i>
+                            Nye rever lastes automatisk etter stemmegivning
+                        </li>
+                    </ul>
+                    
+                    <h6 class="mt-3">Ekstra funksjoner:</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2">
+                            <i class="fas fa-sync-alt text-info me-2"></i>
+                            "Få nye rever" - laster inn nye tilfeldige rever
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-crown text-warning me-2"></i>
+                            Se hvem som leder øverst på siden
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-chart-bar me-2"></i>
+                        Statistikkside
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <h6>Hva du kan se:</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2">
+                            <i class="fas fa-trophy text-warning me-2"></i>
+                            Mest populære rev med bildet
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-list text-primary me-2"></i>
+                            Topp 10 ranking av alle rever
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-chart-pie text-info me-2"></i>
+                            Prosentvis fordeling av stemmer
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-clock text-success me-2"></i>
+                            Når hver rev sist fikk en stemme
+                        </li>
+                    </ul>
+                    
+                    <h6 class="mt-3">Sammendrag:</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2">
+                            <i class="fas fa-vote-yea text-primary me-2"></i>
+                            Totalt antall stemmer avgitt
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-paw text-info me-2"></i>
+                            Antall unike rever som har fått stemmer
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-users text-success me-2"></i>
+                            Antall unike stemmegivere
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Features Overview -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <h2 class="text-center mb-4">
+                <i class="fas fa-star me-2"></i>
+                Funksjoner og egenskaper
+            </h2>
+            
+            <div class="row">
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="card text-center h-100 border-success">
+                        <div class="card-body">
+                            <i class="fas fa-mobile-alt fa-3x text-success mb-3"></i>
+                            <h5 class="card-title">Mobilvenlig</h5>
+                            <p class="card-text">
+                                Fungerer perfekt på både mobil, nettbrett og PC. 
+                                Responsivt design som tilpasser seg skjermstørrelsen.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="card text-center h-100 border-info">
+                        <div class="card-body">
+                            <i class="fas fa-sync-alt fa-3x text-info mb-3"></i>
+                            <h5 class="card-title">Automatisk oppdatering</h5>
+                            <p class="card-text">
+                                Statistikk oppdateres automatisk hvert 30. sekund 
+                                slik at du alltid ser de nyeste resultatene.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="card text-center h-100 border-warning">
+                        <div class="card-body">
+                            <i class="fas fa-shield-alt fa-3x text-warning mb-3"></i>
+                            <h5 class="card-title">Spambeskyttelse</h5>
+                            <p class="card-text">
+                                Systemet forhindrer at samme person stemmer 
+                                på samme rev flere ganger i løpet av kort tid.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="card text-center h-100 border-primary">
+                        <div class="card-body">
+                            <i class="fas fa-random fa-3x text-primary mb-3"></i>
+                            <h5 class="card-title">Tilfeldige bilder</h5>
+                            <p class="card-text">
+                                Alle revbilder hentes fra randomfox.ca API 
+                                og er derfor alltid nye og overraskende.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="card text-center h-100 border-secondary">
+                        <div class="card-body">
+                            <i class="fas fa-eye fa-3x text-secondary mb-3"></i>
+                            <h5 class="card-title">Universell utforming</h5>
+                            <p class="card-text">
+                                Støtter skjermlesere, tastaturnavigasjon 
+                                og andre tilgjengelighetsfunksjoner.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="card text-center h-100 border-dark">
+                        <div class="card-body">
+                            <i class="fas fa-database fa-3x text-dark mb-3"></i>
+                            <h5 class="card-title">Persistent lagring</h5>
+                            <p class="card-text">
+                                Alle stemmer lagres i database slik at 
+                                statistikken bevares selv ved systemrestart.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Troubleshooting -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="card border-warning">
+                <div class="card-header bg-warning text-dark">
+                    <h4 class="mb-0">
+                        <i class="fas fa-tools me-2"></i>
+                        Vanlige problemer og løsninger
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <div class="accordion" id="troubleshootingAccordion">
+                        <!-- Problem 1 -->
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="problem1">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse1">
+                                    <i class="fas fa-exclamation-triangle text-warning me-2"></i>
+                                    Bildene laster ikke
+                                </button>
+                            </h2>
+                            <div id="collapse1" class="accordion-collapse collapse" data-bs-parent="#troubleshootingAccordion">
+                                <div class="accordion-body">
+                                    <strong>Mulige årsaker:</strong>
+                                    <ul>
+                                        <li>Treig internettforbindelse</li>
+                                        <li>randomfox.ca API er midlertidig nede</li>
+                                        <li>Nettleserens cache må tømmes</li>
+                                    </ul>
+                                    <strong>Løsninger:</strong>
+                                    <ol>
+                                        <li>Oppdater siden ved å trykke F5 eller Ctrl+R</li>
+                                        <li>Klikk "Få nye rever" for å laste inn nye bilder</li>
+                                        <li>Sjekk internettforbindelsen din</li>
+                                        <li>Prøv å tømme nettleserens cache</li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Problem 2 -->
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="problem2">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse2">
+                                    <i class="fas fa-ban text-danger me-2"></i>
+                                    Kan ikke stemme
+                                </button>
+                            </h2>
+                            <div id="collapse2" class="accordion-collapse collapse" data-bs-parent="#troubleshootingAccordion">
+                                <div class="accordion-body">
+                                    <strong>Mulige årsaker:</strong>
+                                    <ul>
+                                        <li>Du har allerede stemt på denne reven nylig</li>
+                                        <li>Nettverksproblemer</li>
+                                        <li>Backend-serveren er utilgjengelig</li>
+                                    </ul>
+                                    <strong>Løsninger:</strong>
+                                    <ol>
+                                        <li>Vent 1 minutt før du prøver å stemme på samme rev igjen</li>
+                                        <li>Prøv å stemme på en annen rev først</li>
+                                        <li>Sjekk at du er koblet til internett</li>
+                                        <li>Oppdater siden og prøv igjen</li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Problem 3 -->
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="problem3">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse3">
+                                    <i class="fas fa-chart-bar text-info me-2"></i>
+                                    Statistikk vises ikke
+                                </button>
+                            </h2>
+                            <div id="collapse3" class="accordion-collapse collapse" data-bs-parent="#troubleshootingAccordion">
+                                <div class="accordion-body">
+                                    <strong>Mulige årsaker:</strong>
+                                    <ul>
+                                        <li>Ingen har stemt ennå</li>
+                                        <li>Database-problemer</li>
+                                        <li>API-endepunktet svarer ikke</li>
+                                    </ul>
+                                    <strong>Løsninger:</strong>
+                                    <ol>
+                                        <li>Stem på noen rever først for å generere data</li>
+                                        <li>Klikk "Oppdater statistikk" på statistikksiden</li>
+                                        <li>Vent litt og prøv igjen</li>
+                                        <li>Gå tilbake til hovedsiden og stem på flere rever</li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Problem 4 -->
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="problem4">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse4">
+                                    <i class="fas fa-mobile-alt text-success me-2"></i>
+                                    Problemer på mobil
+                                </button>
+                            </h2>
+                            <div id="collapse4" class="accordion-collapse collapse" data-bs-parent="#troubleshootingAccordion">
+                                <div class="accordion-body">
+                                    <strong>Vanlige mobilproblemer:</strong>
+                                    <ul>
+                                        <li>Knapper er for små å trykke på</li>
+                                        <li>Siden ser rar ut</li>
+                                        <li>Treeg lasting</li>
+                                    </ul>
+                                    <strong>Løsninger:</strong>
+                                    <ol>
+                                        <li>Zoom inn for å gjøre knapper større</li>
+                                        <li>Roter enheten til landskapsmodus</li>
+                                        <li>Lukk andre apper for å frigjøre minne</li>
+                                        <li>Koble til WiFi i stedet for mobildata</li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tips and Tricks -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="card border-info">
+                <div class="card-header bg-info text-white">
+                    <h4 class="mb-0">
+                        <i class="fas fa-lightbulb me-2"></i>
+                        Tips og triks
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6><i class="fas fa-keyboard me-2"></i>Tastatursnarveier:</h6>
+                            <ul class="list-unstyled">
+                                <li><kbd>Tab</kbd> - Naviger mellom elementer</li>
+                                <li><kbd>Enter</kbd> - Aktiver knapper og lenker</li>
+                                <li><kbd>F5</kbd> - Oppdater siden</li>
+                                <li><kbd>Ctrl</kbd> + <kbd>+</kbd> - Zoom inn</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h6><i class="fas fa-mouse me-2"></i>Musesnarveier:</h6>
+                            <ul class="list-unstyled">
+                                <li>Høyreklikk på bilde → "Åpne i ny fane" for større visning</li>
+                                <li>Dobbeltklikk på kort for å stemme raskt</li>
+                                <li>Musehjul for å scrolle gjennom statistikk</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="row mt-3">
+                        <div class="col-12">
+                            <h6><i class="fas fa-star me-2"></i>Pro-tips:</h6>
+                            <ul class="list-unstyled">
+                                <li class="mb-2">
+                                    <i class="fas fa-check text-success me-2"></i>
+                                    Statistikksiden oppdateres automatisk - du trenger ikke å oppdatere manuelt
+                                </li>
+                                <li class="mb-2">
+                                    <i class="fas fa-check text-success me-2"></i>
+                                    Du kan stemme på ubegrenset antall rever, men ikke samme rev for ofte
+                                </li>
+                                <li class="mb-2">
+                                    <i class="fas fa-check text-success me-2"></i>
+                                    Bildene kommer fra randomfox.ca, så hver rev er unik og tilfeldig
+                                </li>
+                                <li class="mb-2">
+                                    <i class="fas fa-check text-success me-2"></i>
+                                    Systemet fungerer best med moderne nettlesere (Chrome, Firefox, Safari, Edge)
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact -->
+    <div class="row">
+        <div class="col-12 text-center">
+            <div class="card border-secondary">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <i class="fas fa-question-circle me-2"></i>
+                        Trenger du mer hjelp?
+                    </h5>
+                    <p class="card-text">
+                        Dette er et eksamenssystem for ITK2004. 
+                        Hvis du opplever tekniske problemer, kontakt systemadministrator.
+                    </p>
+                    <div class="row justify-content-center">
+                        <div class="col-auto">
+                            <a href="/" class="btn btn-primary me-2">
+                                <i class="fas fa-home me-1"></i>Tilbake til hovedsiden
+                            </a>
+                            <a href="/about" class="btn btn-outline-secondary">
+                                <i class="fas fa-info-circle me-1"></i>Om systemet
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 

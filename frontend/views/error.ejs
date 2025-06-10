@@ -1,0 +1,96 @@
+<% layout('layout') -%>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8 text-center">
+            <!-- Error Icon -->
+            <div class="mb-4">
+                <% if (error.status === 404) { %>
+                    <i class="fas fa-search fa-5x text-warning mb-3"></i>
+                <% } else { %>
+                    <i class="fas fa-exclamation-triangle fa-5x text-danger mb-3"></i>
+                <% } %>
+            </div>
+
+            <!-- Error Title -->
+            <h1 class="display-4 text-primary mb-3">
+                <% if (error.status === 404) { %>
+                    Siden ble ikke funnet
+                <% } else { %>
+                    Noe gikk galt
+                <% } %>
+            </h1>
+
+            <!-- Error Code -->
+            <p class="lead text-muted mb-4">
+                Feilkode: <%= error.status || 500 %>
+            </p>
+
+            <!-- Error Message -->
+            <div class="card border-<%= error.status === 404 ? 'warning' : 'danger' %> mb-4">
+                <div class="card-body">
+                    <p class="card-text mb-0">
+                        <%= error.message || 'En uventet feil oppstod.' %>
+                    </p>
+                </div>
+            </div>
+
+            <!-- Helpful Actions -->
+            <div class="row justify-content-center mb-4">
+                <div class="col-md-10">
+                    <h5 class="mb-3">Hva kan du gjøre?</h5>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <i class="fas fa-home fa-2x text-primary mb-2"></i>
+                                    <h6>Gå til hovedsiden</h6>
+                                    <p class="small text-muted mb-0">
+                                        Start på nytt med rev-stemming
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <i class="fas fa-sync-alt fa-2x text-info mb-2"></i>
+                                    <h6>Oppdater siden</h6>
+                                    <p class="small text-muted mb-0">
+                                        Prøv å laste inn siden på nytt
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation Buttons -->
+            <div class="d-grid gap-2 d-md-block">
+                <a href="/" class="btn btn-primary btn-lg">
+                    <i class="fas fa-home me-2"></i>
+                    Gå til hovedsiden
+                </a>
+                <button onclick="window.location.reload()" class="btn btn-outline-secondary btn-lg">
+                    <i class="fas fa-sync-alt me-2"></i>
+                    Oppdater siden
+                </button>
+                <button onclick="window.history.back()" class="btn btn-outline-info btn-lg">
+                    <i class="fas fa-arrow-left me-2"></i>
+                    Gå tilbake
+                </button>
+            </div>
+
+            <!-- Additional Help -->
+            <div class="mt-5">
+                <p class="text-muted">
+                    <i class="fas fa-question-circle me-1"></i>
+                    Hvis problemet vedvarer, se 
+                    <a href="/guide" class="text-decoration-none">brukerveiledningen</a> 
+                    for mer hjelp.
+                </p>
+            </div>
+        </div>
+    </div>
+</div> 
