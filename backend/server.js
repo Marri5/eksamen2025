@@ -85,7 +85,7 @@ app.post('/api/vote', async (req, res) => {
       res.cookie('foxvoting_user_id', userId, {
         maxAge: 365 * 24 * 60 * 60 * 1000, // 1 year
         httpOnly: true,
-        secure: false, // Set to true in production with HTTPS
+        secure: false,
         sameSite: 'lax'
       });
     }

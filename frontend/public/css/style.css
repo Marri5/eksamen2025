@@ -136,15 +136,29 @@ main {
     color: #000000 !important;
 }
 
-/* Modal error messages */
-.modal-body #errorMessage {
+/* Modal error messages - more specific targeting */
+.modal-body #errorMessage,
+.modal-body p,
+#voteErrorModal .modal-body,
+#voteErrorModal .modal-body p,
+#voteErrorModal .modal-body *,
+.modal-body {
     color: #000000 !important;
-    font-weight: 500;
 }
 
-/* Ensure all modal body text in error modals is black */
-#voteErrorModal .modal-body,
-#voteErrorModal .modal-body p {
+/* Bootstrap modal text override */
+.modal .modal-body,
+.modal .modal-body p,
+.modal .modal-body span,
+.modal .modal-body div {
+    color: #000000 !important;
+}
+
+/* Specific targeting for error modal */
+div[id*="Error"] .modal-body,
+div[id*="Error"] .modal-body *,
+.modal[id*="Error"] .modal-body,
+.modal[id*="Error"] .modal-body * {
     color: #000000 !important;
 }
 
@@ -272,4 +286,16 @@ main {
     .card {
         break-inside: avoid;
     }
+}
+
+/* FORCE BLACK TEXT FOR ALL MODALS - MAXIMUM SPECIFICITY */
+body .modal .modal-dialog .modal-content .modal-body,
+body .modal .modal-dialog .modal-content .modal-body p,
+body .modal .modal-dialog .modal-content .modal-body span,
+body .modal .modal-dialog .modal-content .modal-body div,
+body #voteErrorModal .modal-body p#errorMessage,
+body #voteErrorModal .modal-body,
+html body .modal-body {
+    color: #000000 !important;
+    font-weight: 500 !important;
 } 
