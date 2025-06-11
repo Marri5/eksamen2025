@@ -4,6 +4,50 @@ document.addEventListener('DOMContentLoaded', function() {
     const voteButtons = document.querySelectorAll('.vote-btn');
     const loadingOverlay = document.getElementById('loadingOverlay');
     
+    // Check vote status on page load
+    checkVoteStatus();
+    
+    async function checkVoteStatus() {
+        try {
+            const response = await fetch('/api/vote-status', {
+                method: 'GET',
+                credentials: 'include' // Include cookies
+            });
+            
+            const data = await response.json();
+            
+            if (data.success && data.hasVoted) {
+                // User has already voted - disable voting
+                disableVoting(data.message, data.voteTimestamp);
+            }
+        } catch (error) {
+            console.error('Error checking vote status:', error);
+            // Continue normally if can't check status
+        }
+    }
+    
+    function disableVoting(message, voteTimestamp) {
+        voteButtons.forEach(button => {
+            button.disabled = true;
+            button.textContent = 'Du har allerede stemt';
+            button.classList.remove('btn-primary');
+            button.classList.add('btn-secondary');
+        });
+        
+        // Show info message
+        const container = document.querySelector('.voting-container') || document.querySelector('.container');
+        if (container) {
+            const alertDiv = document.createElement('div');
+            alertDiv.className = 'alert alert-info alert-dismissible fade show mt-3';
+            alertDiv.innerHTML = `
+                <strong>Du har allerede stemt!</strong> ${message}
+                ${voteTimestamp ? `<br><small>Stemme avgitt: ${new Date(voteTimestamp).toLocaleString('no-NO')}</small>` : ''}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+            container.insertBefore(alertDiv, container.firstChild);
+        }
+    }
+    
     // Handle vote button clicks
     voteButtons.forEach(button => {
         button.addEventListener('click', async function(e) {
@@ -28,6 +72,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     headers: {
                         'Content-Type': 'application/json',
                     },
+                    credentials: 'include', // Include cookies
                     body: JSON.stringify({ imageUrl })
                 });
                 
@@ -48,10 +93,23 @@ document.addEventListener('DOMContentLoaded', function() {
                         messageElement.textContent = data.message || 'Din stemme er registrert!';
                     }
                     
+                    // Permanently disable voting after successful vote
+                    disableVoting('Takk for din stemme!');
+                    
                     successModal.show();
                 } else {
-                    // Show error modal
-                    showError(data.message || 'Kunne ikke registrere stemmen');
+                    // Handle already voted case
+                    if (data.alreadyVoted) {
+                        disableVoting(data.message);
+                        showError(data.message);
+                    } else {
+                        // Show other error
+                        showError(data.message || 'Kunne ikke registrere stemmen');
+                        // Re-enable vote buttons for other errors
+                        setTimeout(() => {
+                            voteButtons.forEach(btn => btn.disabled = false);
+                        }, 2000);
+                    }
                 }
             } catch (error) {
                 console.error('Voting error:', error);
@@ -63,12 +121,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 // Show error modal
                 showError('Nettverksfeil - kunne ikke kontakte serveren');
+                
+                // Re-enable vote buttons after network errors
+                setTimeout(() => {
+                    voteButtons.forEach(btn => btn.disabled = false);
+                }, 2000);
             }
-            
-            // Re-enable vote buttons after a short delay
-            setTimeout(() => {
-                voteButtons.forEach(btn => btn.disabled = false);
-            }, 2000);
         });
     });
     

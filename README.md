@@ -32,7 +32,6 @@ Et avstemningssystem for å velge den søteste reven, bygget for praktisk eksame
 fox-voting-system/
 ├── README.md                    # Hovedinstruksjoner og oversikt
 ├── package.json                 # Node.js avhengigheter og scripts
-├── env.template                 # Miljøvariabler mal
 │
 ├── backend/                     # Backend API server
 │   ├── server.js               # Express server og API-endepunkter
@@ -55,16 +54,6 @@ fox-voting-system/
 │       │   └── main.js         # Frontend JavaScript
 │       └── images/
 │           └── .gitkeep        # Placeholder for images
-│
-├── scripts/                     # Deployment scripts
-│   ├── setup-mongodb.sh        # MongoDB oppsett
-│   ├── setup-backend.sh        # Backend server oppsett
-│   └── setup-frontend.sh       # Frontend server oppsett
-│
-└── docs/                        # Dokumentasjon
-    ├── PROJECT_OUTLINE.md       # Prosjektskisse og arkitektur
-    ├── SECURITY.md              # Sikkerhetsdokumentasjon
-    └── DEPLOYMENT_CHECKLIST.md  # Deployment sjekkliste
 ```
 ## Filbeskrivelser
 
