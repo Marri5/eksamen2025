@@ -1,5 +1,10 @@
 // Main JavaScript for fox voting system
 document.addEventListener('DOMContentLoaded', function() {
+    // Debug: Log browser info
+    console.log('Browser:', navigator.userAgent);
+    console.log('Cookies enabled:', navigator.cookieEnabled);
+    console.log('Document cookies:', document.cookie);
+    
     // Get all vote buttons
     const voteButtons = document.querySelectorAll('.vote-btn');
     const loadingOverlay = document.getElementById('loadingOverlay');
