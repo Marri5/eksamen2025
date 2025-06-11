@@ -20,11 +20,9 @@ const submitVote = async (req, res) => {
       userId = uuidv4();
       res.cookie('foxvoting_user_id', userId, {
         maxAge: 365 * 24 * 60 * 60 * 1000, // 1 year
-        httpOnly: true, // Security: prevent JavaScript access
+        httpOnly: true,
         secure: false, // Set to true in production with HTTPS
-        sameSite: 'lax', // Compatible with Chrome and cross-origin
-        path: '/', // Ensure cookie is available site-wide
-        domain: undefined // Let browser determine domain
+        sameSite: 'lax'
       });
     }
 
