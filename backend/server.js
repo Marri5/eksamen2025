@@ -1,259 +1,75 @@
 const express = require('express');
-const mongoose = require('mongoose');
 const cors = require('cors');
 const bodyParser = require('body-parser');
-const axios = require('axios');
 const cookieParser = require('cookie-parser');
-const { v4: uuidv4 } = require('uuid');
 require('dotenv').config();
 
+// Import configuration
+const connectDB = require('./config/database');
+const corsOptions = require('./config/cors');
+
+// Import middleware
+const logger = require('./middleware/logger');
+const errorHandler = require('./middleware/errorHandler');
+
+// Import routes
+const foxRoutes = require('./routes/foxRoutes');
+const voteRoutes = require('./routes/voteRoutes');
+const statisticsRoutes = require('./routes/statisticsRoutes');
+const utilityRoutes = require('./routes/utilityRoutes');
+
+// Initialize express app
 const app = express();
 const PORT = process.env.BACKEND_PORT || 5000;
 
+// Connect to database
+connectDB();
+
 // Middleware
-app.use(cors({
-  origin: 'http://10.12.91.103:3000', // Frontend server
-  credentials: true
-}));
+app.use(cors(corsOptions));
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(logger); // Custom logging middleware
 
-// MongoDB connection - only accessible via internal IP
-mongoose.connect('mongodb://10.12.91.102:27017/foxvoting', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-})
-.then(() => console.log('Connected to MongoDB'))
-.catch(err => console.error('MongoDB connection error:', err));
+// Routes
+app.use('/api/foxes', foxRoutes);
+app.use('/api/vote', voteRoutes);
+app.use('/api/statistics', statisticsRoutes);
+app.use('/api', utilityRoutes); // health and docs endpoints
 
-// Import models
-const Fox = require('./models/Fox');
-const Vote = require('./models/Vote');
-
-// API Routes
-// Get two random fox images
-app.get('/api/foxes/random', async (req, res) => {
-  try {
-    // Fetch two random fox images from the external API
-    const [fox1, fox2] = await Promise.all([
-      axios.get('https://randomfox.ca/floof/'),
-      axios.get('https://randomfox.ca/floof/')
-    ]);
-
-    // Extract image URLs
-    const images = [
-      { id: 1, url: fox1.data.image },
-      { id: 2, url: fox2.data.image }
-    ];
-
-    // Save or update foxes in database
-    for (const img of images) {
-      await Fox.findOneAndUpdate(
-        { url: img.url },
-        { url: img.url, lastShown: new Date() },
-        { upsert: true, new: true }
-      );
-    }
-
-    res.json({ success: true, images });
-  } catch (error) {
-    console.error('Error fetching fox images:', error);
-    res.status(500).json({ 
-      success: false, 
-      message: 'Kunne ikke hente bilder. Vennligst prøv igjen.' 
-    });
-  }
-});
-
-// Vote for a fox
-app.post('/api/vote', async (req, res) => {
-  try {
-    const { imageUrl } = req.body;
-    
-    if (!imageUrl) {
-      return res.status(400).json({ 
-        success: false, 
-        message: 'Ingen bilde-URL mottatt' 
-      });
-    }
-
-    // Get or create user ID from cookie
-    let userId = req.cookies.foxvoting_user_id;
-    if (!userId) {
-      userId = uuidv4();
-      res.cookie('foxvoting_user_id', userId, {
-        maxAge: 365 * 24 * 60 * 60 * 1000, // 1 year
-        httpOnly: true,
-        secure: false,
-        sameSite: 'lax'
-      });
-    }
-
-    // Check if user has already voted
-    const existingVote = await Vote.findOne({ userId: userId });
-    if (existingVote) {
-      return res.status(400).json({
-        success: false,
-        message: 'Du har allerede stemt! Bare én stemme per bruker er tillatt.',
-        alreadyVoted: true
-      });
-    }
-
-    // Find or create fox
-    let fox = await Fox.findOne({ url: imageUrl });
-    if (!fox) {
-      fox = await Fox.create({ url: imageUrl });
-    }
-
-    // Increment vote count
-    fox.votes += 1;
-    await fox.save();
-
-    // Create vote record with user ID
-    await Vote.create({
-      foxId: fox._id,
-      userId: userId,
-      timestamp: new Date()
-    });
-
-    res.json({ 
-      success: true, 
-      message: 'Takk for din stemme!',
-      totalVotes: fox.votes,
-      userId: userId // Optional: for debugging
-    });
-  } catch (error) {
-    console.error('Error recording vote:', error);
-    res.status(500).json({ 
-      success: false, 
-      message: 'Kunne ikke registrere stemmen. Vennligst prøv igjen.' 
-    });
-  }
-});
-
-// Check if user has already voted
-app.get('/api/vote-status', async (req, res) => {
-  try {
-    const userId = req.cookies.foxvoting_user_id;
-    
-    if (!userId) {
-      return res.json({
-        success: true,
-        hasVoted: false,
-        message: 'Ingen stemme registrert ennå'
-      });
-    }
-
-    const existingVote = await Vote.findOne({ userId: userId });
-    
-    res.json({
-      success: true,
-      hasVoted: !!existingVote,
-      message: existingVote ? 'Du har allerede stemt' : 'Du kan stemme',
-      voteTimestamp: existingVote ? existingVote.timestamp : null
-    });
-  } catch (error) {
-    console.error('Error checking vote status:', error);
-    res.status(500).json({
-      success: false,
-      message: 'Kunne ikke sjekke stemme-status'
-    });
-  }
-});
-
-// Get statistics
-app.get('/api/statistics', async (req, res) => {
-  try {
-    // Get top 10 most voted foxes
-    const topFoxes = await Fox.find()
-      .sort({ votes: -1 })
-      .limit(10);
-
-    // Get the leading fox
-    const leader = topFoxes[0];
-
-    // Get total votes
-    const totalVotes = await Vote.countDocuments();
-
-    res.json({
-      success: true,
-      statistics: {
-        topFoxes: topFoxes.map(fox => ({
-          id: fox._id,
-          url: fox.url,
-          votes: fox.votes
-        })),
-        leader: leader ? {
-          url: leader.url,
-          votes: leader.votes,
-          message: `Rev ${leader._id.toString().slice(-2)} er søtest akkurat nå!`
-        } : null,
-        totalVotes
-      }
-    });
-  } catch (error) {
-    console.error('Error fetching statistics:', error);
-    res.status(500).json({ 
-      success: false, 
-      message: 'Kunne ikke hente statistikk' 
-    });
-  }
-});
-
-// Health check endpoint
-app.get('/api/health', (req, res) => {
-  res.json({ 
-    status: 'OK', 
-    service: 'Backend API',
-    timestamp: new Date().toISOString() 
-  });
-});
-
-// API Documentation endpoint
-app.get('/api/docs', (req, res) => {
+// Root endpoint
+app.get('/', (req, res) => {
   res.json({
-    endpoints: [
-      {
-        method: 'GET',
-        path: '/api/foxes/random',
-        description: 'Henter to tilfeldige revebilder',
-        response: {
-          success: true,
-          images: [
-            { id: 1, url: 'https://randomfox.ca/images/1.jpg' },
-            { id: 2, url: 'https://randomfox.ca/images/2.jpg' }
-          ]
-        }
-      },
-      {
-        method: 'POST',
-        path: '/api/vote',
-        description: 'Registrerer en stemme for et revebilde',
-        body: { imageUrl: 'https://randomfox.ca/images/1.jpg' },
-        response: {
-          success: true,
-          message: 'Takk for din stemme!',
-          totalVotes: 42
-        }
-      },
-      {
-        method: 'GET',
-        path: '/api/statistics',
-        description: 'Henter statistikk over mest populære rever',
-        response: {
-          success: true,
-          statistics: {
-            topFoxes: [],
-            leader: {},
-            totalVotes: 100
-          }
-        }
-      }
-    ]
+    message: 'Fox Voting API',
+    version: '1.0.0',
+    endpoints: {
+      health: '/api/health',
+      docs: '/api/docs',
+      foxes: '/api/foxes/random',
+      vote: '/api/vote',
+      voteStatus: '/api/vote-status',
+      statistics: '/api/statistics'
+    }
   });
 });
 
-app.listen(PORT, '10.12.91.101', () => {
-  console.log(`Backend server running on http://10.12.91.101:${PORT}`);
+// 404 handler for undefined routes
+app.use('*', (req, res) => {
+  res.status(404).json({
+    success: false,
+    message: 'Route not found'
+  });
+});
+
+// Error handling middleware (must be last)
+app.use(errorHandler);
+
+// Start server
+const BACKEND_HOST = process.env.BACKEND_HOST || '10.12.91.101';
+
+app.listen(PORT, BACKEND_HOST, () => {
+  console.log(`Fox Voting Backend Server running on http://${BACKEND_HOST}:${PORT}`);
+  console.log(`API Documentation: http://${BACKEND_HOST}:${PORT}/api/docs`);
+  console.log(`Health Check: http://${BACKEND_HOST}:${PORT}/api/health`);
 }); 

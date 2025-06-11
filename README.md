@@ -2,19 +2,6 @@
 
 Et avstemningssystem for å velge den søteste reven, bygget for praktisk eksamen i Informasjonsteknologi Vg2.
 
-## 📋 Innholdsfortegnelse
-
-- [Systemkrav](#systemkrav)
-- [Arkitektur](#arkitektur)
-- [Installasjon](#installasjon)
-- [Deployment](#deployment)
-- [Bruk](#bruk)
-- [API-dokumentasjon](#api-dokumentasjon)
-- [Sikkerhet](#sikkerhet)
-- [Feilsøking](#feilsøking)
-
-## 🖥️ Systemkrav
-
 ### Servere
 - **Frontend Server**: 10.12.91.103
 - **Backend Server**: 10.12.91.101
@@ -32,9 +19,25 @@ Et avstemningssystem for å velge den søteste reven, bygget for praktisk eksame
 fox-voting-system/
 ├── README.md                    # Hovedinstruksjoner og oversikt
 ├── package.json                 # Node.js avhengigheter og scripts
+├── .env                         # Miljøvariabler for konfigurasjon
 │
-├── backend/                     # Backend API server
-│   ├── server.js               # Express server og API-endepunkter
+├── backend/                     # Backend API server (modular arkitektur)
+│   ├── server.js               # Hovedserver fil og middleware setup
+│   ├── config/                 # Konfigurasjonsfiler
+│   │   ├── database.js         # MongoDB tilkoblingskonfigurasjon
+│   │   └── cors.js             # CORS policy konfigurasjon
+│   ├── controllers/            # Business logic controllers
+│   │   ├── foxController.js    # Fox-relaterte funksjoner
+│   │   ├── voteController.js   # Stemme-relaterte funksjoner
+│   │   └── statisticsController.js # Statistikk-relaterte funksjoner
+│   ├── routes/                 # API route definitioner
+│   │   ├── foxRoutes.js        # /api/foxes/* endpoints
+│   │   ├── voteRoutes.js       # /api/vote/* endpoints
+│   │   ├── statisticsRoutes.js # /api/statistics/* endpoints
+│   │   └── utilityRoutes.js    # /api/health, /api/docs endpoints
+│   ├── middleware/             # Custom middleware
+│   │   ├── errorHandler.js     # Sentralisert feilhåndtering
+│   │   └── logger.js           # Request logging middleware
 │   └── models/                 # MongoDB modeller
 │       ├── Fox.js              # Fox datamodell
 │       └── Vote.js             # Vote datamodell
@@ -52,21 +55,42 @@ fox-voting-system/
 │       │   └── style.css       # Custom CSS
 │       ├── js/
 │       │   └── main.js         # Frontend JavaScript
+│       └── images/             # Statiske bilder
+│
+├── scripts/                     # Hjelpescripts
+│   └── seed-data.js            # Database seeding script
 ```
-## Filbeskrivelser
 
-### Backend-filer
-- **server.js**: Hovedfil for backend API med Express-konfigurasjon og alle API-endepunkter
-- **models/Fox.js**: Mongoose-modell for revebilder med URL og stemmetall
-- **models/Vote.js**: Mongoose-modell for individuelle stemmer
+### Konfigurasjon
+- **.env**: Miljøvariabler for porter, hosts og databasekonfigurasjon
+
+### Backend-filer (Modular arkitektur)
+- **server.js**: Hovedserver fil med middleware setup og route mounting
+- **config/database.js**: MongoDB tilkoblingskonfigurasjon med miljøvariabler
+- **config/cors.js**: CORS policy konfigurasjon for cross-origin requests
+- **controllers/**: Business logic separert fra routes
+  - **foxController.js**: Henter og behandler revebilder fra API
+  - **voteController.js**: Håndterer stemmelogikk og brukersporing
+  - **statisticsController.js**: Beregner og returnerer avstemningsstatistikk
+- **routes/**: API endpoint definitioner
+  - **foxRoutes.js**: `/api/foxes/*` routes
+  - **voteRoutes.js**: `/api/vote/*` routes  
+  - **statisticsRoutes.js**: `/api/statistics/*` routes
+  - **utilityRoutes.js**: `/api/health`, `/api/docs` routes
+- **middleware/**: Custom middleware funksjoner
+  - **errorHandler.js**: Sentralisert feilhåndtering og logging
+  - **logger.js**: Request/response logging middleware
+- **models/**: MongoDB Mongoose modeller
+  - **Fox.js**: Revebilder med URL, stemmetall og metadata
+  - **Vote.js**: Individuelle stemmer med bruker-ID og tidsstempel
 
 ### Frontend-filer
-- **server.js**: Express-server som serverer EJS-templates
-- **views/**: Alle EJS-templates for brukergrensesnittet
-- **public/css/style.css**: Custom CSS for responsive design og animasjoner
-- **public/js/main.js**: JavaScript for avstemningsfunksjonalitet og AJAX-kall
+- **server.js**: Express-server som serverer EJS-templates og proxy til backend
+- **views/**: EJS templates med Bootstrap og responsivt design
+- **public/css/style.css**: Custom CSS med dark mode og animasjoner
+- **public/js/main.js**: Frontend JavaScript for AJAX og brukerinteraksjon
 
-## 💻 Bruk
+## Bruk
 
 ### For sluttbrukere
 
@@ -117,7 +141,7 @@ curl -X POST http://10.12.91.101:5000/api/vote \
   -d '{"imageUrl": "https://randomfox.ca/images/1.jpg"}'
 ```
 
-## 🔒 Sikkerhet
+## Sikkerhet
 
 Systemet implementerer flere sikkerhetstiltak:
 
@@ -126,10 +150,9 @@ Systemet implementerer flere sikkerhetstiltak:
 - CORS-konfigurasjon
 - Input-validering
 - Feilhåndtering som skjuler sensitive detaljer
+- Cookie-basert autentisering
 
-Se [SECURITY.md](docs/SECURITY.md) for fullstendig sikkerhetsdokumentasjon.
-
-## 🔧 Feilsøking
+## Feilsøking
 
 ### Vanlige problemer
 
@@ -147,7 +170,6 @@ curl http://10.12.91.101:5000/api/health
 ```bash
 # På database server
 sudo systemctl status mongod
-sudo journalctl -u mongod -f
 
 # Test tilkobling fra backend
 mongo mongodb://10.12.91.102:27017/foxvoting
@@ -167,11 +189,3 @@ sudo tail -f /var/log/nginx/error.log
 - PM2 logger: `pm2 logs`
 - MongoDB logger: `/var/log/mongodb/mongod.log`
 - Nginx logger: `/var/log/nginx/`
-
-## 📝 Lisens
-
-Dette prosjektet er laget for undervisningsformål som del av praktisk eksamen i IT.
-
-## 👥 Kontakt
-
-For spørsmål eller problemer, kontakt IT-administrator.

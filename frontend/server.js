@@ -6,7 +6,10 @@ require('dotenv').config();
 
 const app = express();
 const PORT = process.env.FRONTEND_PORT || 3000;
-const BACKEND_URL = 'http://10.12.91.101:5000';
+const FRONTEND_HOST = process.env.FRONTEND_HOST || '10.12.91.103';
+const BACKEND_HOST = process.env.BACKEND_HOST || '10.12.91.101';
+const BACKEND_PORT = process.env.BACKEND_PORT || 5000;
+const BACKEND_URL = `http://${BACKEND_HOST}:${BACKEND_PORT}`;
 
 // Set up EJS as the view engine
 app.set('view engine', 'ejs');
@@ -149,6 +152,7 @@ app.use((err, req, res, next) => {
   });
 });
 
-app.listen(PORT, '10.12.91.103', () => {
-  console.log(`Frontend server running on http://10.12.91.103:${PORT}`);
+app.listen(PORT, FRONTEND_HOST, () => {
+  console.log(`Frontend server running on http://${FRONTEND_HOST}:${PORT}`);
+  console.log(`Connected to backend: ${BACKEND_URL}`);
 }); 
