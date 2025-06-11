@@ -52,8 +52,6 @@ fox-voting-system/
 │       │   └── style.css       # Custom CSS
 │       ├── js/
 │       │   └── main.js         # Frontend JavaScript
-│       └── images/
-│           └── .gitkeep        # Placeholder for images
 ```
 ## Filbeskrivelser
 
