@@ -68,17 +68,61 @@ app.post('/vote', async (req, res) => {
   try {
     const { imageUrl } = req.body;
     
-    // Forward vote to backend
+    // Forward vote to backend with cookies
     const response = await axios.post(`${BACKEND_URL}/api/vote`, {
       imageUrl
+    }, {
+      headers: {
+        'Cookie': req.headers.cookie || ''
+      }
     });
+    
+    // Forward any cookies from backend to frontend
+    if (response.headers['set-cookie']) {
+      response.headers['set-cookie'].forEach(cookie => {
+        res.setHeader('Set-Cookie', cookie);
+      });
+    }
     
     res.json(response.data);
   } catch (error) {
     console.error('Error voting:', error);
+    
+    // Check if it's an "already voted" error
+    if (error.response && error.response.data) {
+      res.status(error.response.status || 500).json(error.response.data);
+    } else {
+      res.status(500).json({ 
+        success: false, 
+        message: 'Kunne ikke registrere stemmen. Vennligst prøv igjen.' 
+      });
+    }
+  }
+});
+
+// Vote status endpoint (AJAX)
+app.get('/api/vote-status', async (req, res) => {
+  try {
+    // Forward request to backend with cookies
+    const response = await axios.get(`${BACKEND_URL}/api/vote-status`, {
+      headers: {
+        'Cookie': req.headers.cookie || ''
+      }
+    });
+    
+    // Forward any cookies from backend to frontend
+    if (response.headers['set-cookie']) {
+      response.headers['set-cookie'].forEach(cookie => {
+        res.setHeader('Set-Cookie', cookie);
+      });
+    }
+    
+    res.json(response.data);
+  } catch (error) {
+    console.error('Error checking vote status:', error);
     res.status(500).json({ 
       success: false, 
-      message: 'Kunne ikke registrere stemmen. Vennligst prøv igjen.' 
+      message: 'Kunne ikke sjekke stemme-status' 
     });
   }
 });
