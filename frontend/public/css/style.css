@@ -120,6 +120,34 @@ main {
     text-align: center;
 }
 
+/* Error message styling - ensure black text */
+.alert-danger,
+.alert-danger p,
+.alert-danger span,
+#errorMessage,
+.error-template p,
+.error-template span {
+    color: #000000 !important;
+}
+
+/* Override Bootstrap muted text in error contexts */
+.text-muted.error-text,
+.alert .text-muted {
+    color: #000000 !important;
+}
+
+/* Modal error messages */
+.modal-body #errorMessage {
+    color: #000000 !important;
+    font-weight: 500;
+}
+
+/* Ensure all modal body text in error modals is black */
+#voteErrorModal .modal-body,
+#voteErrorModal .modal-body p {
+    color: #000000 !important;
+}
+
 /* Responsive design */
 @media (max-width: 768px) {
     .display-4 {
@@ -217,6 +245,18 @@ main {
     .card-body ol,
     .card-body ul {
         color: #d0d0d0 !important;
+    }
+    
+    /* Dark mode error messages should be white for visibility */
+    .alert-danger,
+    .alert-danger p,
+    .alert-danger span,
+    #errorMessage,
+    .error-template p,
+    .error-template span,
+    #voteErrorModal .modal-body,
+    #voteErrorModal .modal-body p {
+        color: #ffffff !important;
     }
 }
 
